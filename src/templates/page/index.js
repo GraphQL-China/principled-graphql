@@ -34,7 +34,7 @@ const StyledMobileHeader = styled(MobileHeader)({
   position: 'fixed'
 });
 
-const anchorPattern = /<a href="([\w/#-]+)">([\w\s.,-]+)<\/a>/gm;
+const anchorPattern = /<a href="([\w/%#-]+)">(.+)<\/a>/gm;
 
 export default class Page extends Component {
   static propTypes = {
@@ -44,7 +44,7 @@ export default class Page extends Component {
 
   componentDidMount() {
     const hashElement = document.getElementById(
-      this.props.location.hash.slice(1)
+      decodeURIComponent(this.props.location.hash.slice(1))
     );
     if (hashElement) {
       hashElement.scrollIntoView();
@@ -76,7 +76,7 @@ export default class Page extends Component {
             path: isLink ? withPrefix(hashPath) : hashPath,
             title,
             description: description
-              .slice(0, description.indexOf('.') + 1)
+              .slice(0, description.indexOf('。') + 1)
               .replace('>', '')
               .trim()
               .replace(/\*/g, ''),

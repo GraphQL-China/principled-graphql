@@ -1,22 +1,22 @@
 ---
 path: /agility
-title: Agility Principles
-description: Rapidly rolling out the graph and continuously adapting it to changing needs
+title: 敏捷原则
+description: 快速推出图并适应不断变化的需求
 order: 2
 image: ../images/agility.png
 ---
 
-## 4. Abstract, Demand-Oriented Schema
+## 4. 抽象、面向需求的 Schema
 
-> The schema should act as an **abstraction layer** that provides flexibility to consumers while hiding service implementation details.
+> Schema 应当作为**抽象层**以隐藏服务实现细节并为消费者提供灵活性。
 
 A large part of the value of GraphQL lies in providing an abstraction between services and consumers, so the schema should not be tightly coupled either to particular service implementations or to particular consumers as they exist today. By keeping implementation details out of the schema, it should be possible to refactor the services that implement the graph – for example, transitioning from a monolith to microservices, or changing the language in which a service is implemented – without disturbing apps in the field. Likewise, the schema shouldn't be tightly coupled to the way that particular apps fetch data. It should be possible to write new apps with minimal changes to the graph if their functionality is similar to that of existing apps.
 
 To accomplish this, use the standard of a **demand-oriented** schema: a schema focused on providing a great developer experience to an app developer building a new feature against the existing graph. Aiming for this standard will help prevent the graph from becoming coupled to a service implementation that could change in the future, and help increase the reuse value of each field added to the graph.
 
-## 5. Use an Agile Approach to Schema Development
+## 5. 使用敏捷方法进行 Schema 开发
 
-> The schema should be **built incrementally** based on actual requirements and **evolve smoothly** over time.
+> Schema 应当根据实际需求**增量构建**，并随着时间的推移**平滑演进**。
 
 It may be tempting to try to define, ahead of time, the “perfect schema” for all of your organization's data. Rather, what really makes a schema valuable is the degree to which it follows actual user requirements, which are never known perfectly up front and are constantly changing. The true path to the “perfect schema” is to make it easy for the graph to evolve in response to actual needs.
 
@@ -24,17 +24,17 @@ Fields shouldn't be added to the schema speculatively. Ideally, each field shoul
 
 Updating the graph should be a continuous process. Rather than releasing a new “version” of the graph periodically, such as every 6 or 12 months, it should be possible to change the graph many times a day if necessary. New fields can be added at any time. To remove a field, it is first deprecated, and then removed when no consumers use it. The schema registry enables this agile evolution of the graph, together with processes and tooling that keep everyone aware of changes that could affect them. This ensures that only fully vetted changes can go into production.
 
-## 6. Iteratively Improve Performance
+## 6. 迭代地提高性能
 
-> Performance management should be a **continuous, data-driven process**, adapting smoothly to changing query loads and service implementations.
+> 性能管理应当是一个**连续的、数据驱动的过程**，可以平滑地适应不断变化的查询负载和服务实现。
 
 The data graph layer is the right place to hold the conversation about performance and capacity that always must occur between services teams and the app developers that consume their services. This conversation should be an ongoing process that gives service developers continuous and proactive visibility into what consumers intend to do with their services.
 
 Rather than optimizing every possible use of the graph, the focus should be on supporting the actual query shapes that are needed in production. Tooling should extract proposed new query shapes and surface them, before they go into production, to all affected service teams with latency requirements and projected query volume. Once the query is in production, its performance should be continuously monitored. If this principle is followed, problems should be easy to track back to the service that is not behaving as expected.
 
-## 7. Use Graph Metadata to Empower Developers
+## 7. 使用图的元数据为开发人员提供支持
 
-> Developers should be equipped with **rich awareness of the graph** throughout the entire development process.
+> 开发人员应当在整个开发过程中**对图充分了解**。
 
 A major part of GraphQL's value is the massive productivity boost that it gives to developers. To maximize this boost, a developer's tooling should give them ubiquitous awareness of the data graph, threaded through all of the tools that they use throughout the entire development lifecycle.
 
