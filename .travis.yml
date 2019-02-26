@@ -1,0 +1,12 @@
+language: node_js
+node_js: 10
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GH_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: false
+  fqdn: principles.graphql.cn
+  local-dir: public
+  on:
+    branch: zh-cn
