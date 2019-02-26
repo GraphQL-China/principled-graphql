@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "develop": "gatsby develop",
+    "test": "gatsby build",
     "start": "npm run develop"
   },
   "dependencies": {
