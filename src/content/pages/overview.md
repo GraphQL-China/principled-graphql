@@ -3,12 +3,12 @@ path: /
 order: 0
 ---
 
-# Principled GraphQL
+# GraphQL 开发原则
 
 <div class="float">
   <img src="../images/overview.png">
 </div>
 
-GraphQL, despite the name, isn't simply a query language. It's a comprehensive solution to the problem of connecting modern apps to services in the cloud. As such, it forms the basis for a new and important layer in the modern application development stack: the **data graph**. This new layer brings all of a company's app data and services together in one place, with one consistent, secure, and easy-to-use interface, so that anyone can draw upon it with minimal friction.
+GraphQL 名为但不仅仅是一种查询语言。它是对连接现代应用程序到云服务这一问题的全面解决方案。因此，它构成了现代应用程序开发堆栈中一个新的重要层的基础：**数据图**。这个新的层将公司的所有应用程序数据和服务集中在同一个地方，具有一致、安全且易于使用的界面，因此任何人都能够通过最小的磨合利用它。
 
-At [**Apollo**](https://apollographql.com), we've been building industry leading data graph technology since 2015, and we estimate our software is now used in over 90% of GraphQL implementations. Over the years, we've had thousands of conversations with developers implementing GraphQL at companies of all sizes. We want to share what we've learned, so we've distilled their experiences into a set of best practices for creating, maintaining, and operating a data graph. We present them here as 10 GraphQL Principles, broken out into three categories, in a format inspired by the [Twelve Factor App](https://12factor.net).
+在 [**Apollo**](https://apollographql.com)，我们自 2015 年以来一直在构建业界领先的数据图技术，且我们估计我们的软件现已用于超过 90％ 的 GraphQL 实现。多年来，我们与来自不同规模公司的开发人员进行了关于实现 GraphQL 的数千次对话。我们希望分享我们所学到的知识，因此我们将他们的经验提炼成一套创建、维护和操作数据图的最佳实践。在这里我们将它们呈现为 10 大 GraphQL 原则，分为三类，其格式灵感来自于 [Twelve Factor App](https://12factor.net)。

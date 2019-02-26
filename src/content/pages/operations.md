@@ -1,14 +1,14 @@
 ---
 path: /operations
-title: Operations Principles
-description: Securely deploying the graph to production at scale
+title: 操作原则
+description: 安全地将图大规模部署到生产中
 order: 3
 image: ../images/operations.png
 ---
 
-## 8. Access and Demand Control
+## 8. 访问和需求控制
 
-> Grant access to the graph on a **per-client basis**, and manage **what** and **how** clients can access it.
+> **基于每个客户端**授予对图的访问权限，并管理客户端可以访问的**内容**和**方式**。
 
 Authorization in a data graph has two equally important aspects: access control, which dictates which objects and fields a user is allowed to access, and demand control, which dictates how (and how much) the user is allowed to access those resources. While access control is often talked about, attention also needs to be given to demand control, since it is critical in any production deployment of GraphQL. It is a mistake to allow users to perform any possible query regardless of cost, with no ability to manage its impact on production systems. Both access and demand control must be performed with full awareness of the semantics and performance of the data graph. It's not sufficient to limit a user to particular number of queries per minute without an analysis of the queries actually being sent, as a query could access a wide universe of services and the cost of a query can vary over multiple orders of magnitude.
 
@@ -21,9 +21,9 @@ Best practices for demand control include:
 * As a second line of defense, estimating the cost of a query before performing it and instituting per-user and per-app query cost budgets can protect against overuse of preregistered operations or in cases where operation preregistration is not possible.
 * Developers should be able to disable the ability of particular apps to send particular queries in production, either as a safety net in emergencies or if a third party app is found to be using the data graph in unacceptable ways.
 
-## 9. Structured Logging
+## 9. 结构化日志
 
-> Capture **structured logs** of all graph operations and leverage them as the primary tool for understanding graph usage.
+> 捕获所有图操作的**结构化日志**，并以之为主要工具了解图的使用情况。
 
 A wealth of information can be captured about each operation (read or write) that is performed on a graph: what user and app performed the operation, what fields were accessed, how the operation was actually executed, how it performed, and more. This information is highly valuable and should be systematically captured and made available for later use. Instead of a text log, it should be captured in a structured, machine readable format so that it can be leveraged for as many purposes as possible.
 
@@ -40,9 +40,9 @@ Because traces truly capture how a graph is being used, they can be used for a w
 
 Traces for all graph operations should be collected in one central place, so that there is one authoritative stream of traces. This stream can then be piped into other observability systems (perhaps after a simple transformation for existing systems that are not GraphQL-aware), or stored in one or more data warehouses for later use (aggregated and sampled as budget, use cases, and scale require). 
 
-## 10. Separate the GraphQL Layer from the Service Layer
+## 10. 将 GraphQL 层从服务层分离
 
-> Adopt a **layered architecture** with data graph functionality broken into a separate tier rather than baked into every service.
+> 采用**分层架构**将数据图功能分解为单独的层，而不是融入到每个服务中。
 
 In most API technologies, clients do not talk directly to servers, except possibly in development. Instead, a layered approach is adopted in which some concerns such as load balancing, caching, service location, or API key management are split into a separate tier. This tier can then be designed, operated, and scaled separately from the backend services.
 

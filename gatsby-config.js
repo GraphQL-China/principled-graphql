@@ -8,8 +8,8 @@ module.exports = {
     }
   ],
   siteMetadata: {
-    title: 'Principled GraphQL',
-    description: 'Best practices for implementing and scaling a data graph'
+    title: 'GraphQL 开发原则',
+    description: '实现和扩展数据图的最佳实践'
   },
   plugins: [
     {
