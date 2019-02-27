@@ -10,30 +10,30 @@ image: ../images/integrity.png
 
 > 你的公司应当只有**一个统一的图**，而不是多个团队分别创建的多个图。
 
-By having one graph, you maximize the value of GraphQL:
+只使用一个图，你可以最大化 GraphQL 的价值：
 
-* More data and services can be accessed from a single query
-* Code, queries, skills, and experience are portable across teams
-* One central catalog of all available data that all graph users can look to
-* Implementation cost is minimized, because graph implementation work isn't duplicated
-* Central management of the graph – for example, unified access control policies – becomes possible
+* 可以通过单个查询访问更多数据和服务
+* 代码、查询、技能和经验可跨团队移植
+* 图的每个用户都可以查看所有可用数据的中心目录
+* 实现成本最小化，因为无需重复图的实现工作
+* 图的中心管理——例如，统一访问控制策略——变得可能
 
-When teams create their own individual graphs without coordinating their work, it is all but inevitable that their graphs will begin to overlap, adding the same data to the graph in incompatible ways. At best, this is costly to rework; at worst, it creates chaos. This principle should be followed as early in a company's data graph adoption journey as possible.
+当不同团队在没有协调工作的情况下分别创建独立的图时，几乎不可避免出现图之间的重叠，于是只能以不兼容的方式向图添加相同的数据。在最好的情况下也会造成很高的返工成本；而在最坏的情况下会造成混乱。应当尽早在公司的数据图使用中遵循本原则。
 
 ## 2. 联合实现
 
 > 虽然只有一个图，但该图应该由多个团队**联合**实现。
 
-Monolithic architectures are difficult to scale without highly specialized infrastructure, and data graphs are no exception. Instead of implementing an organization's entire data graph layer in a single codebase, responsibility for defining and implementing the graph should be divided across multiple teams. Each team should be responsible for maintaining the portion of the schema that exposes their data and services, while having the flexibility to develop independently and operate on their own release cycle.
+如果没有高度专业化的基础结构，单体架构很难扩展，数据图也不例外。不应当在单个代码库中实现组织的整个数据图这一层，而是应当在多个团队之间划分定义和实现图的职责。每个团队都应当负责维护公开其数据和服务的那一部分 schema，同时具有独立开发和在自己的发布周期中运行的灵活性。
 
-This maintains the value of a single, unified view of the graph, while keeping development efforts across the company decoupled.
+这样可以保持图作为单一统一视图的价值，同时解耦整个公司的开发工作。
 
 ## 3. 追踪在注册表中的 Schema
 
 > 注册和追踪图时应当有一个**单一的事实来源**。
 
-Just like it's important to track source code in a version control system, it's important to track the definition of your graph in a schema registry. There should be a single schema registry for your company that is the authoritative definition of the graph, rather than relying on whatever processes are running at the moment or whatever code is checked in on a developer's laptop. Like a source control system, the schema registry should store the history of changes to the graph and who made them, and it should understand the concept of multiple versions of the graph (for example, staging and production, or different development branches) in a way that parallels the software development process.
+就像在版本控制系统中跟踪源代码一样，跟踪 schema 注册表中对于图的定义非常重要。你的公司应当有一个单独的 schema 注册表作为对图的权威定义，而不是依赖于当前正在运行的任何进程或是在开发人员的笔记本电脑上签入的任何代码。与源代码控制系统一样，schema 注册表应该存储更改历史记录以及创建它们的人员，并且应该理解图的多个版本的概念（例如暂存、生产环境或不同的开发分支），在某种程度上类似于软件开发过程。
 
-The schema registry should become the central hub of the system, powering developer tools, workflows, or any business processes that would benefit from awareness of the data graph and any actual or proposed changes to it.
+Schema 注册表应成为系统的中心枢纽，为开发者工具、工作流或任何将从数据图以及对其任何实际或建议的更改中受益的业务流程提供支持。
 
 <!-- end -->
