@@ -10,46 +10,46 @@ image: ../images/operations.png
 
 > **基于每个客户端**授予对图的访问权限，并管理客户端可以访问的**内容**和**方式**。
 
-Authorization in a data graph has two equally important aspects: access control, which dictates which objects and fields a user is allowed to access, and demand control, which dictates how (and how much) the user is allowed to access those resources. While access control is often talked about, attention also needs to be given to demand control, since it is critical in any production deployment of GraphQL. It is a mistake to allow users to perform any possible query regardless of cost, with no ability to manage its impact on production systems. Both access and demand control must be performed with full awareness of the semantics and performance of the data graph. It's not sufficient to limit a user to particular number of queries per minute without an analysis of the queries actually being sent, as a query could access a wide universe of services and the cost of a query can vary over multiple orders of magnitude.
+数据图中的授权具有两个同等重要的方面：访问控制，其指示允许用户访问的对象和字段；以及需求控制，其指示允许用户访问这些资源的方式（以及多少）。虽然经常被提及是访问控制，但是也需要注意需求控制，因为它在 GraphQL 的任何生产部署中都至关重要。允许用户执行任何可能的查询而不考虑成本是错误的，这会导致无法管理其对生产系统的影响。无论执行访问还是需求控制都必须在充分了解数据图的语义和性能的情况下才执行。在不分析实际发送的查询的情况下，不应该限制用户的每分钟查询数，因为查询可以访问相当广泛的服务，并且查询的成本可以在多个数量级上变化。
 
-Authentication in a data graph also has two aspects: the app that is requesting the operation, and the person that is using the app. While access control may center on the person using the app, proper demand control depends at least as much on per-app controls as it does on per-person controls, as it is the developer of the app, not the user of the app, that is responsible for the particular query shapes that the app uses to do its job.
+数据图中的鉴权同样有两个方面：请求操作的应用以及使用该应用的用户。虽然访问控制可能以用户为中心，但需求控制至少保证同等的应用级控制和用户级控制，因为特定的查询情形是由是应用的开发者，而不是应用的用户负责的。
 
-Best practices for demand control include:
+需求控制的最佳实践包括：
 
-* When untrusted users are accessing production systems, they should only send queries that have been preregistered by the authenticated developer of the app, instead of allowing them to send arbitrary queries with the app's credentials. This is sometimes relaxed for internal apps that are distributed only to trusted users.
-* For apps that are expected to send large numbers of queries, teams should design a query approval workflow, aligned with the broader software development cycle, to vet queries before they go into production. This ensures that they do not fetch unnecessary data and that server capacity is available to support them.
-* As a second line of defense, estimating the cost of a query before performing it and instituting per-user and per-app query cost budgets can protect against overuse of preregistered operations or in cases where operation preregistration is not possible.
-* Developers should be able to disable the ability of particular apps to send particular queries in production, either as a safety net in emergencies or if a third party app is found to be using the data graph in unacceptable ways.
+* 当未认证用户访问生产系统时，他们应该只能发送应用中由被认证的开发者预注册的查询，而不是允许他们使用应用的凭据发送任意查询。不过对于仅仅分发给受信任用户的内部应用而言，这个限制可以放宽。
+* 对于预计会发送大量查询的应用，各团队应设计一个能与更宽泛软件开发周期保持一致的查询审批工作流程，以便在查询投入生产之前对其进行审核。这可确保它们不会获取不必要的数据，并且提前准备对应的服务器容量来支撑它们。
+* 作为第二道防线，在执行查询之前估计查询的成本，并建立用户级和应用级查询成本预算，可以防止过度使用预注册的操作或者无法使用预注册操作的场景。
+* 开发者应该能够禁用特定应用在生产中发送特定查询，譬如作为紧急情况下的安全网或发现第三方应用程序以不可接受的方式使用数据图等场景。
 
 ## 9. 结构化日志
 
 > 捕获所有图操作的**结构化日志**，并以之为主要工具了解图的使用情况。
 
-A wealth of information can be captured about each operation (read or write) that is performed on a graph: what user and app performed the operation, what fields were accessed, how the operation was actually executed, how it performed, and more. This information is highly valuable and should be systematically captured and made available for later use. Instead of a text log, it should be captured in a structured, machine readable format so that it can be leveraged for as many purposes as possible.
+可以捕获关于在图关系执行的每个操作（读取或写入）的大量信息：哪位用户和什么应用执行了操作、访问了哪些字段、操作的实际执行方式、执行效果等。这些信息非常有价值，应该系统化地捕获以备以后使用。相比较文本日志，它更应该捕获成结构化的机器可读的格式，以便尽可能多地利用它。
 
-The record of a graph operation is called a **trace**. A trace should bring together all pertinent information about an operation in one place, including business information (who performed the operation, what was accessed or changed, which feature of which app built by which developer, whether it succeeded, how it performed) and purely technical information (which backend services were contacted, how each service contributed to latency, whether caches were used). 
+图关系操作的记录称为**追踪**。追踪应该在一个地方汇集有关操作的所有相关信息，包括业务信息（谁执行的操作、访问或更改的内容、由哪位开发者构建的应用的哪一个功能、是否成功、执行效果如何）以及纯技术信息（哪个后端服务被调用、每个服务如何导致延迟、是否使用了缓存）。
 
-Because traces truly capture how a graph is being used, they can be used for a wide range of purposes:
+因为追踪能捕捉图关系是怎样被使用的，所以它们能被用于广泛的用途：
 
-* Understanding whether a deprecated field can be removed, or if not, the specific clients that are still accessing it and how important they are
-* Predicting how long a query will take to execute – in realtime, as the developer is typing the query in their IDE – based on live production data
-* Automatically detecting problems in production (such as increased latency or error rates) and diagnosing their root cause
-* Providing an authoritative audit trail showing which users have accessed a particular record
-* Powering business intelligence queries (do people search for ice cream more often when it is hot where they are?)
-* Generating invoices for partners based on API usage, with the possibility of a detailed cost model based on either the particular fields accessed or the resources consumed
+* 了解某个弃用字段是否可以删除，如果不可以，那么找到那些访问它的客户端，分析那些客户端的重要性
+* 实时预测某个查询的执行所需时间：当开发者在 IDE 中键入查询，即可基于生产数据实时得出
+* 自动检测生产中的问题（例如增加的延迟或错误率）并诊断其根本原因
+* 提供权威审计跟踪，显示特定记录有哪些用户访问
+* 为商业智能查询助力（当人们在炎热的地方时，人们会更频繁地搜索冰淇淋吗？）
+* 根据 API 使用情况为合作伙伴生成发票，以及可以根据访问的特定字段或消耗的资源生成详细的成本模型
 
-Traces for all graph operations should be collected in one central place, so that there is one authoritative stream of traces. This stream can then be piped into other observability systems (perhaps after a simple transformation for existing systems that are not GraphQL-aware), or stored in one or more data warehouses for later use (aggregated and sampled as budget, use cases, and scale require). 
+所有图关系操作的数据应该集中保存，以便有一个权威的追踪流。然后可以再将此流传输到其他观测系统（对于不支持 GraphQL 的现有系统可能需要进行简单转换），或者存储在一个或多个数据仓库中以备今后使用（采样、汇总然后转换成预算、用例和需求规模）。
 
 ## 10. 将 GraphQL 层从服务层分离
 
 > 采用**分层架构**将数据图功能分解为单独的层，而不是融入到每个服务中。
 
-In most API technologies, clients do not talk directly to servers, except possibly in development. Instead, a layered approach is adopted in which some concerns such as load balancing, caching, service location, or API key management are split into a separate tier. This tier can then be designed, operated, and scaled separately from the backend services.
+在大多数 API 技术中，除了开发期之外，客户端都不与服务器直接通信。而是采用分层方法，譬如负载平衡、缓存、服务定位或 API 密钥管理之类的一些问题被单独分层。然后，这些层就可以与后端服务分开设计、运作和扩展。
 
-It's no different with GraphQL. Rather than baking all of the functionality needed for a complete data graph system into each and every service, most data graph functionality should be factored out into a separate tier that sits in between clients and services, leaving each service to focus on serving the actual client request. This tier, which can be composed of multiple processes, performs functions such as access and demand control, federation, trace collection, and potentially caching. Some parts of this tier will be GraphQL-specific and require deep awareness of the data graph, while other functions such as load balancing and client authentication can likely be performed by systems that are already in place.
+GraphQL 也同样适用。相比较将完整数据图系统所需的所有功能都整合到每个服务中，大多数数据图功能应该被提取到位于客户端和服务之间的单独层，使每个服务都能专注于处理客户端的具体请求。该层可以由多个进程组成，譬如执行访问控制和需求控制、[联邦](https://en.wikipedia.org/wiki/Federated_database_system)、追踪收集和缓存等功能。此层的某些部分是 GraphQL 特有的，需要深入了解数据图，而其他功能，如负载平衡和客户端身份验证，可以使用现存系统。
 
-This separate tier is valuable even in simple scenarios with only one app and only one service; otherwise, functionality that properly belongs in the middle tier will have to be implemented in the server. In complex applications, this tier may start to look like a geographically distributed system: receiving incoming queries through multiple ingress points, processing some of them on the edge of the network with the benefit of edge caches, routing subcomponents of the queries to multiple data centers in the public cloud, privately operated, or operated by partners, and finally assembling these components into a query result, all while recording a trace that memorializes the entire operation.
+即使在只有一个应用和一个服务的简单场景中，这个单独的层也能发挥价值；否则，本该属于中间层的功能就得在服务器中实现了。在复杂的应用中，此层可能看起来像异地分布式系统：通过多个入口点接收传入查询，利用边缘缓存处理边缘网络的查询，将查询的子组件路由到多个数据中心在公共云、私有云或由合作伙伴运营的云中，最后将这些组件组装成查询结果，同时记录一次包含整个操作的追踪。
 
-In some cases, this data graph tier will talk to the backend services using GraphQL. But, most frequently, the backend services are left untouched and continue to be accessed by their existing APIs, such as REST, SOAP, gRPC, Thrift, or even SQL, with the mapping from these APIs to data graph objects accomplished by servers that form one part of the data graph tier.
+在某些情况下，此数据图层将使用 GraphQL 与后端服务进行通信。但是，最常见的是，后端服务保持不变，并继续通过现有 API（如 REST，SOAP，gRPC，Thrift 甚至 SQL）进行访问，再由数据图层的服务器将这些 API 映射到数据图层中去。
 
 <!-- end -->

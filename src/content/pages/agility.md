@@ -10,44 +10,44 @@ image: ../images/agility.png
 
 > Schema 应当作为**抽象层**以隐藏服务实现细节并为消费者提供灵活性。
 
-A large part of the value of GraphQL lies in providing an abstraction between services and consumers, so the schema should not be tightly coupled either to particular service implementations or to particular consumers as they exist today. By keeping implementation details out of the schema, it should be possible to refactor the services that implement the graph – for example, transitioning from a monolith to microservices, or changing the language in which a service is implemented – without disturbing apps in the field. Likewise, the schema shouldn't be tightly coupled to the way that particular apps fetch data. It should be possible to write new apps with minimal changes to the graph if their functionality is similar to that of existing apps.
+GraphQL 的一大价值就是在服务和消费者之间提供了一个抽象层，因此 schema 就不该与特定服务实现或者特定现存消费者强耦合。通过将实现细节从 schema 中分离，就能重构实现图关系的服务的同时 —— 例如，从单体架构切换到微服务架构，或者切换服务的实现语言 —— 而不会影响现有应用。同样地，schema 也不应该和特定应用取数据的方法所耦合。如果新的应用与旧的十分相似，那么应该只需要微微修改图关系。
 
-To accomplish this, use the standard of a **demand-oriented** schema: a schema focused on providing a great developer experience to an app developer building a new feature against the existing graph. Aiming for this standard will help prevent the graph from becoming coupled to a service implementation that could change in the future, and help increase the reuse value of each field added to the graph.
+为了达到这个目的，我们使用**面向需求的** schema：专注于提供良好的开发体验，使得开发者可以更方便地使用现有图关系开发新的特性。以此标准为目标的话，可以防止图关系与一个将要变化的服务实现相耦合，且提升了添加到图关系的每一个字段的复用价值。
 
 ## 5. 使用敏捷方法进行 Schema 开发
 
 > Schema 应当根据实际需求**增量构建**，并随着时间的推移**平滑演进**。
 
-It may be tempting to try to define, ahead of time, the “perfect schema” for all of your organization's data. Rather, what really makes a schema valuable is the degree to which it follows actual user requirements, which are never known perfectly up front and are constantly changing. The true path to the “perfect schema” is to make it easy for the graph to evolve in response to actual needs.
+有件十分有诱惑力的事：提前定义你所有数据的"完美 schema"。然而，真正让一个 schema 产生价值的是贴合用户的需求，但需求永远都不没法完全得知而且还会一直变化。真正通向"完美 schema"的方式是构建易于跟随实际需求变化而进化的图关系。
 
-Fields shouldn't be added to the schema speculatively. Ideally, each field should be added only in response to a concrete need by a consumer for additional functionality, while being designed for maximum reuse by other consumers that have similar needs.
+字段不应该凭臆断添加，理想情况下，每个字段都对于一个具体的消费者附加需求，且要设计成可被其他消费者类似需求最大化复用的形式。
 
-Updating the graph should be a continuous process. Rather than releasing a new “version” of the graph periodically, such as every 6 or 12 months, it should be possible to change the graph many times a day if necessary. New fields can be added at any time. To remove a field, it is first deprecated, and then removed when no consumers use it. The schema registry enables this agile evolution of the graph, together with processes and tooling that keep everyone aware of changes that could affect them. This ensures that only fully vetted changes can go into production.
+图关系的更新应该是一个持续的过程。相比较周期性的发布新"版本"的图关系（例如每 6 个月或者 12 个月），更好的是必要情况下能够一天修改多次。新字段可以在任何时间添加。而移除字段，则需要先将其标记为弃用，然后等到没有消费者在使用它的时候再移除。Schema 注册表使得图关系的敏捷演进成为可能，通过相关的流程和工具，可以让每个人都知晓影响他们的字段改变。这样就能保证只有全面审查过的改变才能进入生产环境。
 
 ## 6. 迭代地提高性能
 
 > 性能管理应当是一个**连续的、数据驱动的过程**，可以平滑地适应不断变化的查询负载和服务实现。
 
-The data graph layer is the right place to hold the conversation about performance and capacity that always must occur between services teams and the app developers that consume their services. This conversation should be an ongoing process that gives service developers continuous and proactive visibility into what consumers intend to do with their services.
+数据图关系层是保存服务团队与消费其服务的应用开发者之间关于性能与容量的会话的绝佳场所。这个会话是一个持续的过程，使服务开发者能够持续主动地了解消费者是如何使用服务的。
 
-Rather than optimizing every possible use of the graph, the focus should be on supporting the actual query shapes that are needed in production. Tooling should extract proposed new query shapes and surface them, before they go into production, to all affected service teams with latency requirements and projected query volume. Once the query is in production, its performance should be continuously monitored. If this principle is followed, problems should be easy to track back to the service that is not behaving as expected.
+相比较优化图关系中每一个可能的用法，更推荐专注于提供生产环境所实际需要的查询情形。相关工具应该提取新提出的查询情形，并在投入生产之前，将其延迟要求和预计查询量呈现给所有受影响的服务团队。一旦这个查询投入到生产之中，它的性能就将被持续监控。当这个原则得到采用实施的时候，问题就能被追溯到表现不合预期的服务。
 
 ## 7. 使用图的元数据为开发人员提供支持
 
 > 开发人员应当在整个开发过程中**对图充分了解**。
 
-A major part of GraphQL's value is the massive productivity boost that it gives to developers. To maximize this boost, a developer's tooling should give them ubiquitous awareness of the data graph, threaded through all of the tools that they use throughout the entire development lifecycle.
+GraphQL 的一个主要价值就是它为开发者带来的巨大生产力提升。为了最大化这一提升效果，开发工具应该让开发者对数据图有更普遍的理解，而开发者也应该在整个开发周期内使用这些工具。
 
-Whenever a developer is doing work that relates to managing data or connecting to services, their tooling should put live information about the graph at their fingertips. This information should always be up-to-date and the tooling should be highly intelligent, applying graph awareness to the situation at hand in helpful and powerful ways. When done properly, not only does developer productivity and happiness increase, but GraphQL becomes the fabric that connects the frontend and backend teams, enabling seamless conversations throughout the development lifecycle.
+每当开发者开展数据管理或者服务连接相关的工作，他们的工具就应该将图关系的实时信息展示在他们指尖。这信息应该保证总是最新的，而工具应该保证是高度智能化的，能够将对图关系的感知以强大而有效的方式应用于手头的工作。当工作完成之际，不仅仅开发者的生产力和幸福度得到提升，GraphQL 也在前后端团队之间穿针引线，让团队间能在整个开发周期内无缝对话。
 
-Some practical examples of the power of data-graph-aware tooling include:
+以下是部分数据图感知工具的实际用例：
 
-* Developers can enjoy live documentation of all available graph data and services, right in their editor and always up-to-date.
-* Information about deprecated fields can be broadcast into the editors of developers using those fields, together with suggested alternatives
-* The estimated cost of a query (in latency or server resources) can be shown to a developer as they're typing it, based on live production data.
-* The operations team can trace load on backend services back to a particular app, version, feature, and even line of code, giving them full visibility into how developers are using their service.
-* When a service developer makes a change to their schema, the impact of that change can automatically be determined as part of the continuous integration process. If the change would break existing clients (as determined by replaying recent production usage), then the service developer can determine the precise clients, versions, and developers that will be affected.
-* As app developers are building features, the new queries that power those features can be extracted from their code and shared with the operations team. With this awareness, the operations team can proactively provision the needed capacity and interject early in the development process if the query can't be approved at the intended scale.
-* When apps are developed in a typed language like TypeScript, Java, or Swift, type information can be propagated all the way from service type declarations through every line of code in the app, ensuring fullstack type correctness and instant feedback on errors.
+* 能在开发者键入这个查询后，就在他们的编辑器中给出所用图数据和服务的实时文档，且总是最新的。
+* 关于弃用字段的信息能被广播到用了这些字段的开发者的编辑器中，同时还给出推荐的备用字段。
+* 一个查询的成本估计（延迟或者服务器资源）能在开发者打这个查询后就给出，基于实时的生产数据。
+* 运维团队能追溯后端服务的负载到具体应用、版本、特性，甚至代码所在行，使他们能够全面地了解开发人员是如何使用他们的服务。
+* 当服务开发者更改了 schema 时，更改的影响可以被自动判定，作为持续集成的一部分。 如果更改会破坏现有客户端（通过重放最近的生产使用情况确定），服务开发者则可以确定那些具体的客户端、版本和开发人员将受到影响。
+* 当应用程序开发者构建功能时，支持这些功能的新查询可以从代码中提取，并与运维团队共享。有了这种认知后，如果无法批准预期的查询规模，运营团队则可以在开发过程的早期介入，并主动提供能力以支持所需规模。
+* 当应用程序使用 TypeScript、Java 或 Swift 等带类型的语言开发时，类型信息可以从服务的类型声明一直传播到应用程序中的每行代码，从而确保全栈的类型正确性和错误信息的即时反馈。
 
 <!-- end -->
